@@ -30,7 +30,7 @@ function run(time) {
         canvasCtx.fillStyle = 'white'
         canvasCtx.font = '20pt sans-serif'
         let FPS = Math.round(1000 / dt) / 1000
-        canvasCtx.fillText(`FPS: ${FPS}`, 10, 30)
+        canvasCtx.fillText(`FPS: ${FPS}`, canvas.width - 150, 30)
     }
 
     // Bouclage
@@ -41,10 +41,8 @@ function run(time) {
  * Préchargement du jeu et lancement
  */
 (function () {
-    // Désactivation de l'anti-aliasing
+    // Désactivation de l'anti-aliasing pour les jeux pixel-art
     canvasCtx.imageSmoothingEnabled = false
-    canvasCtx.msImageSmoothingEnabled = false
-    canvasCtx.webkitImageSmoothingEnabled = false
     LoadGame(canvas, canvasCtx)
     requestAnimationFrame(run)
 })()
