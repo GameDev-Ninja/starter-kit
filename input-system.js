@@ -6,6 +6,8 @@ let downKeys = []
 
 // Lors d'une pression, ajoute le `keyCode` à la liste
 document.addEventListener("keydown", e => {
+    e.preventDefault()
+
     let downKeysIndex = downKeys.findIndex(keyCode => keyCode === e.code)
     if (downKeysIndex !== -1) return
 
@@ -14,6 +16,8 @@ document.addEventListener("keydown", e => {
 
 // Lors du relâchement de pression, retire le keyCode de la liste
 document.addEventListener("keyup", e => {
+    e.preventDefault()
+
     let downKeysIndex = downKeys.findIndex(keyCode => keyCode === e.code)
     downKeys.splice(downKeysIndex, 1)
 })
