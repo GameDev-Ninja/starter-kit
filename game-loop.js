@@ -1,5 +1,8 @@
 // Pour masquer les FPS : mettre false
 const displayFPS = true
+// Couleur de dessin par défaut, se référer au tableau de couleurs
+// présent sur cette page: https://developer.mozilla.org/fr/docs/Web/CSS/color_value#les_mots-cl%C3%A9s
+const defaultFillColor = 'white'
 
 // Identification de l'écran de jeu
 const canvas = document.getElementById("canvas")
@@ -23,6 +26,7 @@ function run(time) {
     // Nettoyage de l'écran
     canvasCtx.clearRect(0, 0, canvas.width, canvas.height)
     // Dessin du nouvel écran de jeu
+    canvasCtx.fillStyle = defaultFillColor;
     DrawGame(canvasCtx)
 
     // Affichage des FPS si nécessaire
