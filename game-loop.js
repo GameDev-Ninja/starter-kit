@@ -1,5 +1,5 @@
 // Pour masquer les FPS : mettre false
-const displayFPS = true
+const displayFPS = false
 
 // Identification de l'écran de jeu
 const canvas = document.getElementById("canvas")
