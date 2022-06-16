@@ -78,18 +78,14 @@ function UpdateGame(deltaTime) {
 function DrawGame(context) {
     drawRect(context, 'B', 'DeepSkyBlue')
 
-    drawRectMinMax(context, 'B')
-
     drawCollisionLines(context)
 
     drawRect(context, 'A', A.touch ? 'FireBrick' : 'Lightgreen')
 
-    drawRectMinMax(context, 'A')
-
     context.textBaseline = 'hanging'
     context.font = '18px sans-serif'
-    drawLeftText(context)
-    drawRightText(context)
+    drawCollisionText(context)
+    drawNoCollisionText(context)
 }
 
 function drawRect(context, rectName, color) {
@@ -102,6 +98,8 @@ function drawRect(context, rectName, color) {
     context.fillRect(rect.x, rect.y, rect.width, rect.height)
     context.fillStyle = 'Black'
     context.fillText(rectName, rect.x + rect.width / 2, rect.y + rect.height / 2)
+
+    drawRectMinMaxText(context, rectName)
 }
 
 function drawCollisionLines(context) {
@@ -120,7 +118,7 @@ function drawCollisionLines(context) {
     context.fillRect(0, B.y_min, screen.w, 1)
 }
 
-function drawLeftText(context) {
+function drawCollisionText(context) {
     let colorFor = condition => condition ? 'red' : 'white'
     context.textAlign = 'left'
 
@@ -140,7 +138,7 @@ function drawLeftText(context) {
     context.fillText(`                  collision == ${emojiFor(aabb(A, B))}`, 5, 97)
 }
 
-function drawRightText(context) {
+function drawNoCollisionText(context) {
     let colorFor = condition => condition ? 'chartreuse' : 'white';
     context.textAlign = 'right'
 
@@ -160,7 +158,7 @@ function drawRightText(context) {
     context.fillText(`noCollision == ${emojiFor(!aabb(A, B))}   `, screen.w - 5, 97)
 }
 
-function drawRectMinMax(context, rectName) {
+function drawRectMinMaxText(context, rectName) {
     context.save();
 
     context.fillStyle = 'black'
