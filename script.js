@@ -20,27 +20,37 @@ let B = {
 }
 
 const screen = {
-    h: 0, // hauteur de l'écran de jeu
-    w: 0, // Largeur de l'écran de jeu
+    height: 0, // hauteur de l'écran de jeu
+    width: 0, // Largeur de l'écran de jeu
 }
 
-const aabbMode = 'collision'
+const watermark = {
+    image: new Image(),
+    x: 0,
+    y: 0
+}
 
 /**
  * Exécutée une seule fois, au chargement
  */
 function LoadGame(canvas, context) {
-    screen.h = canvas.height
-    screen.w = canvas.width
+    screen.height = canvas.height
+    screen.width = canvas.width
 
     // Le carré B sera au centre, immobile (le carré A se déplace à volonté)
-    B.x = screen.w / 2 - B.width / 2
-    B.y = screen.h / 2 - B.height / 2
+    B.x = screen.width / 2 - B.width / 2
+    B.y = screen.height/ 2 - B.height / 2
     // on définit les valeurs min et max des coordonnées de B
     B.x_min = B.x
     B.x_max = B.x + B.width
     B.y_min = B.y
     B.y_max = B.y + B.height
+
+    watermark.image.onload = function() {
+        watermark.x = screen.width - watermark.image.naturalWidth - 10
+        watermark.y = screen.height - watermark.image.naturalHeight - 10
+    }
+    watermark.image.src = './assets/images/logo.png'
 }
 
 /**
@@ -57,13 +67,13 @@ function UpdateGame(deltaTime) {
     if (isKeyDown('ArrowUp') && A.y > 0) {
         A.y -= 10
     }
-    if (isKeyDown('ArrowDown') && A.y_max < screen.h) {
+    if (isKeyDown('ArrowDown') && A.y_max < screen.height) {
         A.y += 10
     }
     if (isKeyDown('ArrowLeft') && A.x_min > 0) {
         A.x -= 10
     }
-    if (isKeyDown('ArrowRight') && A.x_max < screen.w) {
+    if (isKeyDown('ArrowRight') && A.x_max < screen.width) {
         A.x += 10
     }
 
@@ -76,11 +86,13 @@ function UpdateGame(deltaTime) {
  * Exécutée perpétuellement pour dessiner la frame actuelle
  */
 function DrawGame(context) {
+    drawWatermark(context)
+
     drawRect(context, 'B', 'DeepSkyBlue')
 
-    drawCollisionLines(context)
-
     drawRect(context, 'A', A.touch ? 'FireBrick' : 'Lightgreen')
+
+    drawCollisionLines(context)
 
     context.textBaseline = 'hanging'
     context.font = '18px sans-serif'
@@ -88,6 +100,12 @@ function DrawGame(context) {
     drawNoCollisionText(context)
 }
 
+/**
+ * Dessine un rectangle et son nom
+ * @param context
+ * @param rectName
+ * @param color
+ */
 function drawRect(context, rectName, color) {
     context.textBaseline = 'middle'
     context.textAlign = 'center'
@@ -102,22 +120,38 @@ function drawRect(context, rectName, color) {
     drawRectMinMaxText(context, rectName)
 }
 
+/**
+ * Dessine les lignes de collision du rectangle A en pointillés
+ * @param context
+ */
 function drawCollisionLines(context) {
     let colorFor = condition => condition ? 'red' : 'white'
+    context.setLineDash([10, 8])
 
-    context.fillStyle = colorFor(A.x_min <= B.x_max)
-    context.fillRect(B.x_max, 0, 1, screen.h)
+    context.strokeStyle = colorFor(A.x_min <= B.x_max)
+    drawLine(context, B.x_max, 0, B.x_max, screen.height)
 
-    context.fillStyle = colorFor(B.x_min <= A.x_max)
-    context.fillRect(B.x_min, 0, 1, screen.h)
+    context.strokeStyle = colorFor(B.x_min <= A.x_max)
+    drawLine(context, B.x_min, 0, B.x_min, screen.height)
 
-    context.fillStyle = colorFor(A.y_min <= B.y_max)
-    context.fillRect(0, B.y_max, screen.w, 1)
+    context.strokeStyle = colorFor(A.y_min <= B.y_max)
+    drawLine(context, 0, B.y_max, screen.width, B.y_max)
 
-    context.fillStyle = colorFor(B.y_min <= A.y_max)
-    context.fillRect(0, B.y_min, screen.w, 1)
+    context.strokeStyle = colorFor(B.y_min <= A.y_max)
+    drawLine(context, 0, B.y_min, screen.width, B.y_min)
 }
 
+function drawLine(context, fromX, fromY, toX, toY) {
+    context.beginPath();
+    context.moveTo(fromX, fromY);
+    context.lineTo(toX, toY);
+    context.stroke();
+}
+
+/**
+ * Dessine les conditions au format textuel pour la collision à gauche de l'écran de jeu
+ * @param context
+ */
 function drawCollisionText(context) {
     let colorFor = condition => condition ? 'red' : 'white'
     context.textAlign = 'left'
@@ -138,26 +172,35 @@ function drawCollisionText(context) {
     context.fillText(`                  collision == ${emojiFor(aabb(A, B))}`, 5, 97)
 }
 
+/**
+ * Dessine les conditions au format textuel pour la "non-collision" à droite de l'écran de jeu
+ * @param context
+ */
 function drawNoCollisionText(context) {
     let colorFor = condition => condition ? 'chartreuse' : 'white';
     context.textAlign = 'right'
 
     context.fillStyle = colorFor(A.x_max < B.x_min)
-    context.fillText(`A.x_max < B.x_min = ${emojiFor(A.x_max < B.x_min)} ||`, screen.w - 5, 5)
+    context.fillText(`A.x_max < B.x_min = ${emojiFor(A.x_max < B.x_min)} ||`, screen.width - 5, 5)
 
     context.fillStyle = colorFor(B.x_max < A.x_min)
-    context.fillText(`B.x_max < A.x_min = ${emojiFor(B.x_max < A.x_min)} ||`, screen.w - 5, 28)
+    context.fillText(`B.x_max < A.x_min = ${emojiFor(B.x_max < A.x_min)} ||`, screen.width - 5, 28)
 
     context.fillStyle = colorFor(A.y_max < B.y_min)
-    context.fillText(`A.y_max < B.y_min = ${emojiFor(A.y_max < B.y_min)} ||`, screen.w - 5, 51)
+    context.fillText(`A.y_max < B.y_min = ${emojiFor(A.y_max < B.y_min)} ||`, screen.width - 5, 51)
 
     context.fillStyle = colorFor(B.y_max < A.y_min)
-    context.fillText(`B.y_max < A.y_min = ${emojiFor(B.y_max < A.y_min)}   `, screen.w - 5, 74)
+    context.fillText(`B.y_max < A.y_min = ${emojiFor(B.y_max < A.y_min)}   `, screen.width - 5, 74)
 
     context.fillStyle = colorFor(!aabb(A, B))
-    context.fillText(`noCollision == ${emojiFor(!aabb(A, B))}   `, screen.w - 5, 97)
+    context.fillText(`noCollision == ${emojiFor(!aabb(A, B))}   `, screen.width - 5, 97)
 }
 
+/**
+ * Dessine les repères x_min/max et y_min/max sur les bords d'un rectangle
+ * @param context
+ * @param rectName
+ */
 function drawRectMinMaxText(context, rectName) {
     context.save();
 
@@ -177,6 +220,22 @@ function drawRectMinMaxText(context, rectName) {
     context.restore();
 }
 
+/**
+ * Dessine le logo GameDevNinja en transparence
+ * @param context
+ */
+function drawWatermark(context) {
+    context.save();
+    context.globalAlpha = 0.5
+    context.drawImage(watermark.image, watermark.x, watermark.y)
+    context.restore();
+}
+
+/**
+ * Retourne l'emoji ✅ pour un booléen true, et ❌ pour un booléen false
+ * @param condition
+ * @returns {string}
+ */
 function emojiFor(condition) {
     return condition ? '✅' : '❌'
 }
