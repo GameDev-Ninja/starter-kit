@@ -45,20 +45,20 @@ function LoadGame(canvas, context) {
  * Exécutée perpétuellement pour mettre à jour les données
  */
 function UpdateGame(deltaTime) {
+    B.touched = circleCollision(A,B)
     // Prise en compte des mouvements à partir des touches de direction et dans les limites de l'écran
-    if (isKeyDown('ArrowUp') && A.y > A.r) {
+    if (isKeyDown('ArrowUp') && A.y > A.r && !(B.touched && A.y > B.y))  {
         A.y -= 10
     }
-    if (isKeyDown('ArrowDown') && A.y < screen.height - A.r) {
+    if (isKeyDown('ArrowDown') && A.y < screen.height - A.r && !(B.touched && A.y < B.y)) {
         A.y += 10
     }
-    if (isKeyDown('ArrowLeft') && A.x > A.r) {
+    if (isKeyDown('ArrowLeft') && A.x > A.r && !(B.touched && A.x > B.x)) {
         A.x -= 10
     }
-    if (isKeyDown('ArrowRight') && A.x < screen.width - A.r) {
+    if (isKeyDown('ArrowRight') && A.x < screen.width - A.r && !(B.touched && A.x < B.x)) {
         A.x += 10
     }
-    B.touched = circleCollision(A,B)
 }
 
 /**
