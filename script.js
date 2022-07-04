@@ -58,6 +58,7 @@ function UpdateGame(deltaTime) {
     if (isKeyDown('ArrowRight') && A.x < screen.width - A.r) {
         A.x += 10
     }
+    B.touched = circleCollision(A,B)
 }
 
 /**
@@ -69,6 +70,12 @@ function DrawGame(context) {
 }
 
 /**********/
+function circleCollision(A, B){
+    return Math.hypot(
+            Math.abs(A.x - B.x),
+            Math.abs(A.y - B.y)
+        ) <= A.r + B.r
+}
 function drawCircle(context, circle){
     if(circle.name === "A"){ context.fillStyle = "DeepSkyBlue" }
     else if(circle.name === "C"){ context.fillStyle = "Red" }
