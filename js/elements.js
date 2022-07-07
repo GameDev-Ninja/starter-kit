@@ -1,11 +1,12 @@
 /******      Les cercles      ******/
-let A = { // Cercle déplçable
+let A = { // Cercle déplaçable
   x: 50,
   y: 50,
   r: 40,
   name: "A",
   color: "DeepSkyBlue"
 };
+
 let B = { // Cercle fixe
   x: 0,
   y: 0,
@@ -14,6 +15,7 @@ let B = { // Cercle fixe
   color: "LightGreen",
   touched: false
 };
+
 let C = { // Point de contact
   x: 0,
   y: 0,
@@ -29,12 +31,14 @@ let Abis = {
   r: 40,
   color: "DeepSkyBlue"
 };
+
 let Bbis = {
   x: 0,
   y: 0,
   r: 60,
   color: "LightGreen",
 };
+
 let Cbis = { // Point de contact
   x: 0,
   y: 0,
@@ -47,7 +51,7 @@ let distanceAB = 0;
 /******      Divers      ******/
 const screen = {
   width: 0,
-  heigth: 0
+  height: 0
 };
 
 // Pixels / moves

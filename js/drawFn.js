@@ -1,3 +1,16 @@
+function drawLine(context, fromX, fromY, toX, toY) {
+  context.beginPath();
+  context.moveTo(fromX, fromY);
+  context.lineTo(toX, toY);
+  context.stroke();
+}
+
+function setLineStyle(context, lineWidth = 1, color = "white", dashStyle = [0, 0]) {
+  context.lineWidth = lineWidth;
+  context.strokeStyle = color;
+  context.setLineDash(dashStyle);
+}
+
 /**
  * Dessine un cercle à partir d'un objet cercle
  * @param {*} ctx 
@@ -26,13 +39,8 @@ function drawCircle(ctx, circle) {
  * @param {*} ctx 
  */
 function drawSep(ctx) {
-  ctx.beginPath();
-  ctx.lineWidth = 1;
-  ctx.strokeStyle = "White";
-  ctx.setLineDash([0, 0]);
-  ctx.moveTo(0, screen.height * 2 / 3);
-  ctx.lineTo(screen.width, screen.height * 2 / 3);
-  ctx.stroke();
+  setLineStyle(ctx)
+  drawLine(ctx, 0, screen.height * 2 / 3, screen.width, screen.height * 2 / 3);
 }
 
 /**
@@ -43,52 +51,25 @@ function drawLines(ctx) {
   const dash = [10, 4];
 
   // A Ray
-  ctx.beginPath();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "Navy";
-  ctx.setLineDash([0, 0]);
-  ctx.moveTo(Abis.x, Abis.y);
-  ctx.lineTo(Abis.x + Abis.r, Abis.y);
-  ctx.stroke();
+  setLineStyle(ctx, 3, "Navy")
+  drawLine(ctx, Abis.x, Abis.y, Abis.x + Abis.r, Abis.y);
 
   // B Ray
-  ctx.beginPath();
-  ctx.lineWidth = 3;
-  ctx.strokeStyle = "DarkOliveGreen";
-  ctx.setLineDash([0, 0]);
-  ctx.moveTo(Bbis.x, Abis.y);
-  ctx.lineTo(Bbis.x - Bbis.r, Bbis.y);
-  ctx.stroke();
+  setLineStyle(ctx, 3, "DarkOliveGreen")
+  drawLine(ctx, Bbis.x, Abis.y, Bbis.x - Bbis.r, Bbis.y);
 
   // A Dashed
   drawCircle(ctx, { x: Abis.x, y: Abis.y, r: 3, color: "white" });
-  ctx.beginPath();
-  ctx.lineWidth = 2;
-  ctx.strokeStyle = "White";
-  ctx.setLineDash(dash);
-  ctx.moveTo(Abis.x, Abis.y);
-  ctx.lineTo(Abis.x, screen.height * 2 / 3 + 25);
-  ctx.stroke();
+  setLineStyle(ctx, 2, "White", dash)
+  drawLine(ctx, Abis.x, Abis.y, Abis.x, screen.height * 2 / 3 + 25);
 
   // B Dashed
   drawCircle(ctx, { x: Bbis.x, y: Bbis.y, r: 3, color: "white" });
-  ctx.beginPath();
-  ctx.lineWidth = 2;
-  // ctx.strokeStyle = "White";
-  ctx.setLineDash(dash);
-  ctx.moveTo(Bbis.x, Bbis.y);
-  ctx.lineTo(Bbis.x, screen.height * 2 / 3 + 25);
-  ctx.stroke();
+  drawLine(ctx, Bbis.x, Bbis.y, Bbis.x, screen.height * 2 / 3 + 25);
 
   // Distance
-  ctx.beginPath();
-  ctx.lineWidth = 2;
-  // ctx.strokeStyle = "White";
-  ctx.setLineDash([0, 0]);
-  ctx.moveTo(Abis.x, screen.height * 2 / 3 + 25);
-  ctx.lineTo(Bbis.x, screen.height * 2 / 3 + 25);
-  ctx.stroke();
-
+  setLineStyle(ctx, 2)
+  drawLine(ctx, Abis.x, screen.height * 2 / 3 + 25, Bbis.x, screen.height * 2 / 3 + 25);
 }
 
 function drawText(ctx) {
