@@ -171,3 +171,12 @@ Number.prototype.clamp = (min, max) => clamp(min, this, max)
  * @returns {boolean}
  */
 Boolean.random = _ => Math.random() < .5
+
+/**
+ * Retourne l'emoji ✅ pour un booléen true, et ❌ pour un booléen false
+ * @param condition
+ * @returns {string}
+ */
+ function emojiFor(condition) {
+    return condition ? '✅' : '❌'
+}
