@@ -51,11 +51,11 @@ function drawLines(ctx) {
   const dash = [10, 4];
 
   // A Ray
-  setLineStyle(ctx, 3, "Navy")
+  setLineStyle(ctx, 3, "FireBrick")
   drawLine(ctx, Abis.x, Abis.y, Abis.x + Abis.r, Abis.y);
 
   // B Ray
-  setLineStyle(ctx, 3, "DarkOliveGreen")
+  setLineStyle(ctx, 3, "FireBrick")
   drawLine(ctx, Bbis.x, Abis.y, Bbis.x - Bbis.r, Bbis.y);
 
   // A Dashed
