@@ -175,20 +175,32 @@ Boolean.random = _ => Math.random() < .5
 /**
  * Extension du CanvasRenderingContext2D
  */
-CanvasRenderingContext2D.prototype.drawPolygon = function (points) {
+CanvasRenderingContext2D.prototype.drawPolygon = function (points, filled = true) {
     this.beginPath()
     this.moveTo(points[0].x, points[0].y)
     points.slice(1).forEach(point => this.lineTo(point.x, point.y))
     this.closePath()
+
+    if (filled)
+        this.fill()
+    else
+        this.stroke()
 }
 
-CanvasRenderingContext2D.prototype.drawCircle = function (center, radius, startAngle = 0, angle = 2*Math.PI, antiClockWise = true) {
+CanvasRenderingContext2D.prototype.drawCircle = function (center, radius, filled = true) {
     this.beginPath()
-    this.arc(center.x, center.y, radius, startAngle, angle, antiClockWise)
+    this.arc(center.x, center.y, radius, 0, 2*Math.PI)
+
+    if (filled)
+        this.fill()
+    else
+        this.stroke()
+    
 }
 
 CanvasRenderingContext2D.prototype.drawLine = function (from, to) {
-    this.beginPath();
-    this.moveTo(from.x, from.y);
-    this.lineTo(to.x, to.y);
+    this.beginPath()
+    this.moveTo(from.x, from.y)
+    this.lineTo(to.x, to.y)
+    this.stroke()
 }
