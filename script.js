@@ -15,7 +15,8 @@ let M = {
     x: 0,
     y: 0,
     v: 0, // La vélocité verticale, indispensable pour appliquer un effet de gravité.
-    size: 10,
+    size: 30,
+    isGrounded: false
 }
 
 // La Gravité (9.81 m/s²)
@@ -39,18 +40,17 @@ function LoadGame(canvas, ctx) {
     M.x = scr.width/2-M.size/2
     M.y = fHeight - M.size
 
+    keyDown('ArrowUp', () => {
+        if (M.isGrounded) {
+            M.v = -j
+        }
+    })
 }
 
 /**
  * Exécutée perpétuellement pour mettre à jour les données
  */
 function UpdateGame(deltaTime) {
-    // Si besoin on cale Mario au sol à vélocité 0
-    if(M.y + M.size > fHeight){
-        M.v = 0
-        M.y = fHeight - M.size
-    }
-
     // Prise en compte des pressions de touche
     if (isKeyDown('ArrowLeft') && M.x > 0) {
         M.x -= 10
@@ -58,14 +58,15 @@ function UpdateGame(deltaTime) {
     if (isKeyDown('ArrowRight') && M.x < scr.width - M.size) {
         M.x += 10
     }
-    keyUp('ArrowUp', () => {
-        M.v = -j
-    })
 
-    if(M.y + M.size < fHeight){
-        M.v += g * Math.sqrt(deltaTime)
+    M.v += g * Math.sqrt(deltaTime)
+    M.y += M.v
+    M.isGrounded = M.y + M.size >= fHeight
+
+    if(M.isGrounded) {
+        M.v = 0
+        M.y = fHeight - M.size
     }
-    M.y += M.v 
 }
 
 /**
@@ -87,7 +88,6 @@ function drawMario(ctx, M){
  * Petit sol un peu stylé (pas vraiment lol)
  */
 function drawFloor(ctx){
-    
     ctx.strokeStyle = "white"
     ctx.lineWidth = 3
     ctx.beginPath()

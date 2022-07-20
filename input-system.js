@@ -8,10 +8,8 @@ let downKeys = []
 document.addEventListener("keydown", e => {
     e.preventDefault()
 
-    let downKeysIndex = downKeys.findIndex(keyCode => keyCode === e.code)
-    if (downKeysIndex !== -1) return
-
-    downKeys.push(e.code)
+    if (!e.repeat)
+        downKeys.push(e.code)
 })
 
 // Lors du relâchement de pression, retire le keyCode de la liste
@@ -31,7 +29,7 @@ const isKeyDown = searchedCode => downKeys.findIndex(keyCode => keyCode === sear
 // Assigne une fonction à la pression d'une touche
 const keyDown = (keyCode, callback) =>
     document.addEventListener("keydown", e => {
-        if (e.code === keyCode) callback(e)
+        if (e.code === keyCode && !e.repeat) callback(e)
     })
 
 // Assigne une fonction au relâchement d'une touche
