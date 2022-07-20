@@ -18,10 +18,10 @@ let M = {
     size: 10,
 }
 
-// La Gravité 
-let g = 2
+// La Gravité (9.81 m/s²)
+let g = 9.81
 
-// La force des couisses !
+// La force des couisses ! (Vélocité du saut)
 let j = 25
 
 /**
@@ -59,14 +59,13 @@ function UpdateGame(deltaTime) {
         M.x += 10
     }
     keyUp('ArrowUp', () => {
-        console.log(M.v)
         M.v = -j
     })
 
     if(M.y + M.size < fHeight){
-        M.v += g
+        M.v += g * Math.sqrt(deltaTime)
     }
-    M.y += M.v
+    M.y += M.v 
 }
 
 /**
