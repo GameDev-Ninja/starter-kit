@@ -31,7 +31,7 @@ const isKeyDown = searchedCode => downKeys.findIndex(keyCode => keyCode === sear
 // Assigne une fonction à la pression d'une touche
 const keyDown = (keyCode, callback) =>
     document.addEventListener("keydown", e => {
-        if (e.code === keyCode) callback(e)
+        if (e.code === keyCode && !e.repeat) callback(e)
     })
 
 // Assigne une fonction au relâchement d'une touche
