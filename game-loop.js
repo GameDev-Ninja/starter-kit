@@ -1,5 +1,5 @@
 // Pour masquer les FPS : mettre false
-const displayFPS = true
+const displayFPS = false
 // Couleur de dessin par défaut, se référer au tableau de couleurs
 // présent sur cette page: https://developer.mozilla.org/fr/docs/Web/CSS/color_value#les_mots-cl%C3%A9s
 const defaultFillColor = 'white'
