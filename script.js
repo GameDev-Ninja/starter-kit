@@ -59,13 +59,15 @@ function UpdateGame(deltaTime) {
         M.x += 10
     }
 
-    M.v += g * Math.sqrt(deltaTime)
     M.y += M.v
     M.isGrounded = M.y + M.size >= fHeight
-
+    
     if(M.isGrounded) {
         M.v = 0
         M.y = fHeight - M.size
+    }
+    else{
+        M.v += g * Math.sqrt(deltaTime)
     }
 }
 
