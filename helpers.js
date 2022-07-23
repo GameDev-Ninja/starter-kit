@@ -150,7 +150,7 @@ circle = (center, radius) => ({center, radius})
  * @param including
  * @returns {boolean}
  */
-Number.prototype.isBetween = (a, b, including) => isNumberBetween(a, this, b, including)
+Number.prototype.isBetween = function (a, b, including) { return isNumberBetween(a, this, b, including) }
 
 /**
  * Circonscrit le nombre entre un minimum et un maximum
@@ -158,7 +158,7 @@ Number.prototype.isBetween = (a, b, including) => isNumberBetween(a, this, b, in
  * @param max
  * @returns {number}
  */
-Number.prototype.clamp = (min, max) => clamp(min, this, max)
+Number.prototype.clamp = function (min, max) { return clamp(min, this, max) }
 
 
 /**
@@ -171,3 +171,36 @@ Number.prototype.clamp = (min, max) => clamp(min, this, max)
  * @returns {boolean}
  */
 Boolean.random = _ => Math.random() < .5
+
+/**
+ * Extension du CanvasRenderingContext2D
+ */
+CanvasRenderingContext2D.prototype.drawPolygon = function (points, filled = true) {
+    this.beginPath()
+    this.moveTo(points[0].x, points[0].y)
+    points.slice(1).forEach(point => this.lineTo(point.x, point.y))
+    this.closePath()
+
+    if (filled)
+        this.fill()
+    else
+        this.stroke()
+}
+
+CanvasRenderingContext2D.prototype.drawCircle = function (center, radius, filled = true) {
+    this.beginPath()
+    this.arc(center.x, center.y, radius, 0, 2*Math.PI)
+
+    if (filled)
+        this.fill()
+    else
+        this.stroke()
+    
+}
+
+CanvasRenderingContext2D.prototype.drawLine = function (from, to) {
+    this.beginPath()
+    this.moveTo(from.x, from.y)
+    this.lineTo(to.x, to.y)
+    this.stroke()
+}
